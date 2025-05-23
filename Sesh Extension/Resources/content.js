@@ -3,11 +3,6 @@ function ensureGrayScaleTagIsCreated() {
   if (!style) {
     style = document.createElement("style");
     style.id = "grayscale-style";
-    style.textContent = `
-      html {
-        transition: filter 0.3s ease;
-        filter: none !important;
-      }`;
     document.head.appendChild(style);
   }
 }
