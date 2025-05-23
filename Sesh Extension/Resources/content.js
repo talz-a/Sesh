@@ -3,30 +3,29 @@ function ensureGrayScaleTagIsCreated() {
   if (!style) {
     style = document.createElement("style");
     style.id = "grayscale-style";
+    style.textContent = `
+      html {
+        transition: filter 0.3s ease !important;
+      }
+      html.grayscale {
+        filter: grayscale(100%) !important;
+      }
+      html:not(.grayscale) {
+        filter: none !important;
+      }
+    `;
     document.head.appendChild(style);
   }
 }
 
 browser.storage.local.get("grayscaleEnabled").then(({ grayscaleEnabled }) => {
   ensureGrayScaleTagIsCreated();
-  const style = document.getElementById("grayscale-style");
-  style.textContent = `
-    html {
-      transition: filter 0.3s ease;
-      filter: ${grayscaleEnabled ? "grayscale(100%)" : "none"} !important;
-    }
-  `;
+  document.documentElement.classList.toggle("grayscale", grayscaleEnabled);
 });
 
 browser.runtime.onMessage.addListener((msg) => {
   if (msg.action === "toggleGrayscale") {
     ensureGrayScaleTagIsCreated();
-    const style = document.getElementById("grayscale-style");
-    style.textContent = `
-      html {
-        transition: filter 0.3s ease;
-        filter: ${msg.enable ? "grayscale(100%)" : "none"} !important;
-      }
-    `;
+    document.documentElement.classList.toggle("grayscale", msg.enable);
   }
 });
