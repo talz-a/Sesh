@@ -28,4 +28,10 @@ browser.runtime.onMessage.addListener((msg) => {
     ensureGrayScaleTagIsCreated();
     document.documentElement.classList.toggle("grayscale", msg.enable);
   }
+  if (msg.action === "blockYoutube") {
+    if (window.location.hostname === "www.youtube.com") {
+      console.log("Hello from inside");
+      window.location.href = "https://in.pinterest.com/pin/223209725276419188/";
+    }
+  }
 });

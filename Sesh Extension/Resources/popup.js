@@ -27,3 +27,18 @@ toggle.addEventListener("change", () => {
     });
   });
 });
+
+const blockYoutube = document.getElementById("block-youtube");
+
+blockYoutube.addEventListener("change", () => {
+  browser.tabs.query({}, (tabs) => {
+    for (const tab of tabs) {
+      if (tab.id) {
+        browser.tabs.sendMessage(tab.id, {
+          action: "blockYoutube",
+          enable: blockYoutube.checked,
+        });
+      }
+    }
+  });
+});
