@@ -1,19 +1,47 @@
 :root {
   color-scheme: light dark;
+  --ease-out-quart: cubic-bezier(0.165, 0.84, 0.44, 1);
+  --color-bg: hsl(0, 0%, 100%);
+  --color-text: hsl(0, 0%, 10%);
+  --color-title-bg: hsl(205, 100%, 85%);
+  --color-title-text: hsl(205, 100%, 30%);
+  --color-divider: hsl(0, 0%, 88%);
+  --slider-green: hsl(140, 70%, 45%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: hsl(0, 0%, 10%);
+    --color-text: hsl(0, 0%, 90%);
+    --color-divider: hsl(240, 3%, 24%);
+  }
 }
 
 body {
   width: 200px;
-  padding: 10px;
+  padding: 0.625rem;
   font-family: system-ui;
-  text-align: center;
-
-  display: flex;
-  flex-direction: column;
+  text-align: left;
+  background-color: var(--color-bg);
+  color: var(--color-text);
 }
 
 .title {
-  font-size: 1.5rem;
+  background-color: var(--color-title-bg);
+  color: var(--color-title-text);
+  border-radius: 9999px;
+  padding: 0.125rem 0.625rem;
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: 600;
+  display: inline-block;
+  margin: 0 auto;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .toggle-row {
@@ -23,18 +51,20 @@ body {
   justify-content: space-between;
 }
 
-@media (prefers-color-scheme: dark) {
-  /* Dark Mode styles go here. */
+.divider {
+  height: 1px;
+  background-color: var(--color-divider);
+  margin: 12px 0;
+  border: none;
 }
 
-/* Toggle Switch CSS */
-/* https://codepen.io/danklammer/pen/ExpWOPL?anon=true&view=pen */
+/* Toggle Switch CSS -> https://codepen.io/danklammer/pen/ExpWOPL?anon=true&view=pen */
 .toggle {
   appearance: none;
   box-sizing: content-box;
   display: inline-block;
   position: relative;
-  width: 4.5em;
+  width: 4em;
   height: 2em;
   padding: 0.2em;
   border-radius: 1.5em;
@@ -43,11 +73,10 @@ body {
   border: none;
   cursor: pointer;
   background-color: #707070;
-  transition: background ease 0.3s;
+  transition: background var(--ease-out-quart) 0.3s;
 }
-
 .toggle:before {
-  content: "on off";
+  content: "";
   display: block;
   position: absolute;
   z-index: 2;
@@ -64,13 +93,11 @@ body {
   word-spacing: 2.55em;
   color: #fff;
   white-space: nowrap;
-  transition: transform cubic-bezier(0.3, 1.5, 0.7, 1) 0.3s;
+  transition: transform var(--ease-out-quart) 0.3s;
 }
-
 .toggle:checked {
-  background-color: #4cd964;
+  background-color: var(--slider-green);
 }
-
 .toggle:checked:before {
-  transform: translateX(2.5em);
+  transform: translateX(2em);
 }
