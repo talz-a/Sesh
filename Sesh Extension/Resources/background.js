@@ -1,6 +1,19 @@
-browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  console.log("Received request: ", request);
-
-  if (request.greeting === "hello")
-    return Promise.resolve({ farewell: "goodbye" });
-});
+// browser.declarativeNetRequest.updateDynamicRules({
+//   removeRuleIds: [1001],
+//   addRules: [
+//     {
+//       id: 1001,
+//       priority: 1,
+//       action: {
+//         type: "redirect",
+//         redirect: {
+//           url: "https://www.facebook.com",
+//         },
+//       },
+//       condition: {
+//         regexFilter: "^(https?://)?(www\\.)?(m\\.)?youtube\\.com/.*$",
+//         resourceTypes: ["main_frame"],
+//       },
+//     },
+//   ],
+// });
