@@ -1,43 +1,9 @@
-(() => {
-  let blockYoutubeEnabled = false;
-
-  browser.storage.local
-    .get("blockYoutubeEnabled")
-    .then(({ blockYoutubeEnabled: storedBlock }) => {
-      blockYoutubeEnabled = storedBlock ?? false;
-      redirectIfYouTube();
-    });
-
-  function redirectIfYouTube() {
-    if (!blockYoutubeEnabled) return;
-    const host = window.location.hostname;
-    if (host === "youtube.com" || host.endsWith(".youtube.com")) {
-      window.location.href = "https://www.facebook.com";
-    }
-  }
-
-  function interceptHistoryMethods() {
-    const originalPushState = history.pushState;
-    const originalReplaceState = history.replaceState;
-    history.pushState = (...args) => {
-      originalPushState.apply(history, args);
-      redirectIfYouTube();
-    };
-    history.replaceState = (...args) => {
-      originalReplaceState.apply(history, args);
-      redirectIfYouTube();
-    };
-    window.addEventListener("popstate", redirectIfYouTube);
-  }
-
-  interceptHistoryMethods();
-  redirectIfYouTube();
-
+(async () => {
   function ensureGrayScaleTagIsCreated() {
-    let style = document.getElementById("grayscale-style");
+    let style = document.getElementById("grayscaleStyle");
     if (!style) {
       style = document.createElement("style");
-      style.id = "grayscale-style";
+      style.id = "grayscaleStyle";
       style.textContent = `
         html {
           transition: filter 0.3s ease !important;
@@ -53,10 +19,26 @@
     }
   }
 
-  browser.storage.local.get("grayscaleEnabled").then(({ grayscaleEnabled }) => {
-    ensureGrayScaleTagIsCreated();
-    document.documentElement.classList.toggle("grayscale", grayscaleEnabled);
-  });
+  function redirectIfYouTube(isEnabled) {
+    if (!isEnabled) return;
+    const host = window.location.hostname;
+    if (host === "youtube.com" || host.endsWith(".youtube.com")) {
+      window.location.href = "https://www.facebook.com";
+    }
+  }
+
+  const {
+    isGrayscaleEnabled = false,
+    isBlockYoutubeEnabled: storedBlock = false,
+  } = await browser.storage.local.get([
+    "isGrayscaleEnabled",
+    "isBlockYoutubeEnabled",
+  ]);
+  let isBlockYoutubeEnabled = storedBlock;
+
+  ensureGrayScaleTagIsCreated();
+  document.documentElement.classList.toggle("grayscale", isGrayscaleEnabled);
+  redirectIfYouTube(isBlockYoutubeEnabled);
 
   browser.runtime.onMessage.addListener((msg) => {
     if (msg.action === "toggleGrayscale") {
@@ -64,8 +46,8 @@
       document.documentElement.classList.toggle("grayscale", msg.enable);
     }
     if (msg.action === "toggleBlockYoutube") {
-      blockYoutubeEnabled = msg.enable;
-      redirectIfYouTube();
+      isBlockYoutubeEnabled = msg.enable;
+      redirectIfYouTube(isBlockYoutubeEnabled);
     }
   });
 })();

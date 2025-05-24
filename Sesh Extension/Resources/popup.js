@@ -1,14 +1,14 @@
-const grayscaleToggle = document.getElementById("grayscale-toggle");
-const blockYoutubeToggle = document.getElementById("block-youtube");
+const grayscaleToggle = document.getElementById("grayscaleToggle");
+const blockYoutubeToggle = document.getElementById("blockYoutubeToggle");
 
 document.addEventListener("DOMContentLoaded", async () => {
-  const { grayscaleEnabled, blockYoutubeEnabled } =
+  const { isGrayscaleEnabled, isBlockYoutubeEnabled } =
     await browser.storage.local.get([
-      "grayscaleEnabled",
-      "blockYoutubeEnabled",
+      "isGrayscaleEnabled",
+      "isBlockYoutubeEnabled",
     ]);
-  grayscaleToggle.checked = grayscaleEnabled ?? false;
-  blockYoutubeToggle.checked = blockYoutubeEnabled ?? false;
+  grayscaleToggle.checked = isGrayscaleEnabled ?? false;
+  blockYoutubeToggle.checked = isBlockYoutubeEnabled ?? false;
 
   const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
   if (tab?.id) {
@@ -25,28 +25,28 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 grayscaleToggle.addEventListener("change", async () => {
   const enabled = grayscaleToggle.checked;
-  await browser.storage.local.set({ grayscaleEnabled: enabled });
+  await browser.storage.local.set({ isGrayscaleEnabled: enabled });
   const tabs = await browser.tabs.query({ url: "<all_urls>" });
-  for (const tab of tabs) {
+  tabs.forEach((tab) => {
     if (tab.id) {
       browser.tabs.sendMessage(tab.id, {
         action: "toggleGrayscale",
         enable: enabled,
       });
     }
-  }
+  });
 });
 
 blockYoutubeToggle.addEventListener("change", async () => {
   const enabled = blockYoutubeToggle.checked;
-  await browser.storage.local.set({ blockYoutubeEnabled: enabled });
-  const tabs = await browser.tabs.query({ url: "<all_urls>" });
-  for (const tab of tabs) {
+  await browser.storage.local.set({ isBlockYoutubeEnabled: enabled });
+  const youtubeTabs = await browser.tabs.query({ url: "*://*.youtube.com/*" });
+  youtubeTabs.forEach((tab) => {
     if (tab.id) {
       browser.tabs.sendMessage(tab.id, {
         action: "toggleBlockYoutube",
         enable: enabled,
       });
     }
-  }
+  });
 });
