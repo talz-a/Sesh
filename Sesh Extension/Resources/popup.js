@@ -1,14 +1,17 @@
 const grayscaleToggle = document.getElementById("grayscaleToggle");
 const blockYoutubeToggle = document.getElementById("blockYoutubeToggle");
+const blockXToggle = document.getElementById("blockXToggle");
 
 document.addEventListener("DOMContentLoaded", async () => {
-  const { isGrayscaleEnabled, isBlockYoutubeEnabled } =
+  const { isGrayscaleEnabled, isBlockYoutubeEnabled, isBlockXEnabled } =
     await browser.storage.local.get([
       "isGrayscaleEnabled",
       "isBlockYoutubeEnabled",
+      "isBlockXEnabled",
     ]);
   grayscaleToggle.checked = isGrayscaleEnabled ?? false;
   blockYoutubeToggle.checked = isBlockYoutubeEnabled ?? false;
+  blockXToggle.checked = isBlockXEnabled ?? false;
 
   const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
   if (tab?.id) {
@@ -49,4 +52,18 @@ blockYoutubeToggle.addEventListener("change", async () => {
       });
     }
   });
+});
+
+blockXToggle.addEventListener("change", async () => {
+  const enabled = blockXToggle.checked;
+  await browser.storage.local.set({ isBlockXEnabled: enabled });
+  browser.runtime.sendMessage({ action: "toggeBlockX", enable: enabled });
+  if (enabled) {
+    const tabs = await browser.tabs.query({});
+    tabs.forEach((tab) => {
+      if (tab.id && tab.url && tab.url.includes("x.com")) {
+        browser.tabs.update(tab.id, { url: "https://www.facebook.com" });
+      }
+    });
+  }
 });
