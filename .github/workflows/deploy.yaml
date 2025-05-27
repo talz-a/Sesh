@@ -21,11 +21,8 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
-      - name: Setup upload-artifact dependency
-        uses: actions/upload-artifact@v3
-
       - name: Upload web folder
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v1
         with:
           path: web
 
