@@ -77,7 +77,7 @@ blockXToggle.addEventListener("change", async () => {
     const tabs = await browser.tabs.query({});
     tabs.forEach((tab) => {
       if (tab.id && tab.url && tab.url.includes("x.com")) {
-        browser.tabs.update(tab.id, { url: "https://talal-a.dev" });
+        browser.tabs.update(tab.id, { url: "https://talz-a.github.io/Sesh/" });
       }
     });
   }
@@ -95,7 +95,7 @@ blockAIToggle.addEventListener("change", async () => {
         tab.url &&
         (tab.url.includes("chatgpt.com") || tab.url.includes("grok.com"))
       ) {
-        browser.tabs.update(tab.id, { url: "https://talal-a.dev" });
+        browser.tabs.update(tab.id, { url: "https://talz-a.github.io/Sesh/" });
       }
     });
   }

@@ -10,7 +10,7 @@ browser.runtime.onMessage.addListener(async (request) => {
             action: {
               type: "redirect",
               redirect: {
-                url: "https://talal-a.dev",
+                url: "https://talz-a.github.io/Sesh/",
               },
             },
             condition: {
@@ -27,7 +27,7 @@ browser.runtime.onMessage.addListener(async (request) => {
     }
   }
   if (request.action == "toggleBlockAI") {
-    if (request.enabled) {
+    if (request.enable) {
       await browser.declarativeNetRequest.updateDynamicRules({
         removeRuleIds: [1002, 1003],
         addRules: [
@@ -37,7 +37,7 @@ browser.runtime.onMessage.addListener(async (request) => {
             action: {
               type: "redirect",
               redirect: {
-                url: "https://talal-a.dev",
+                url: "https://talz-a.github.io/Sesh/",
               },
             },
             condition: {
@@ -51,7 +51,7 @@ browser.runtime.onMessage.addListener(async (request) => {
             action: {
               type: "redirect",
               redirect: {
-                url: "https://talal-a.dev",
+                url: "https://talz-a.github.io/Sesh/",
               },
             },
             condition: {

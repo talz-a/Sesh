@@ -19,11 +19,20 @@
     }
   }
 
+  function setGrayscale(enabled) {
+    ensureGrayScaleTagIsCreated();
+    if (enabled) {
+      document.documentElement.classList.add("grayscale");
+    } else {
+      document.documentElement.classList.remove("grayscale");
+    }
+  }
+
   function redirectIfYouTube(isEnabled) {
     if (!isEnabled) return;
     const host = window.location.hostname;
     if (host === "youtube.com" || host.endsWith(".youtube.com")) {
-      window.location.href = "https://www.facebook.com";
+      window.location.href = "https://talz-a.github.io/Sesh/";
     }
   }
 
@@ -36,14 +45,12 @@
   ]);
   let isBlockYoutubeEnabled = storedBlock;
 
-  ensureGrayScaleTagIsCreated();
-  document.documentElement.classList.toggle("grayscale", isGrayscaleEnabled);
+  setGrayscale(isGrayscaleEnabled);
   redirectIfYouTube(isBlockYoutubeEnabled);
 
   browser.runtime.onMessage.addListener((msg) => {
     if (msg.action === "toggleGrayscale") {
-      ensureGrayScaleTagIsCreated();
-      document.documentElement.classList.toggle("grayscale", msg.enable);
+      setGrayscale(msg.enable);
     }
     if (msg.action === "toggleBlockYoutube") {
       isBlockYoutubeEnabled = msg.enable;
