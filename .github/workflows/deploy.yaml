@@ -1,4 +1,4 @@
-name: Deploy web folder to gh pages
+name: Deploy Web Folder to GitHub Pages
 
 on:
   push:
@@ -17,12 +17,18 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
+
+      - name: Setup upload-artifact dependency
+        uses: actions/upload-artifact@v3
+
       - name: Upload web folder
         uses: actions/upload-pages-artifact@v2
         with:
           path: web
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v3
